@@ -13,10 +13,10 @@
 
 
 <br></br>
-<p><input type="text" size="1" style="background-color:red">Horizontal Local Maxima Row-wise</p>
-<p><input type="text" size="1" style="background-color:green">Vertical Local Maxima Coloum-wise</p>
-<p><input type="text" size="1" style="background-color:skyblue">Peak Observed</p>
-<button type="button" onclick="findPeak()">Find Peak</button>
+<p><input type="text" size="1" id="red" style="background-color:red">Horizontal Local Maxima Row-wise</p>
+<p><input type="text" size="1" id="green" style="background-color:green">Vertical Local Maxima Coloum-wise</p>
+<p><input type="text" size="1" id="skyblue" style="background-color:skyblue">Peak Observed</p>
+<button type="button" id="peak" onclick="findPeak()">Find Peak</button>
 <p id="demo"></p>
 
 <script>
@@ -27,6 +27,11 @@ var row=0;
 var col=0;
 var ht = " ";
 var Arr = new Array();
+document.getElementById("red").disabled = true;
+document.getElementById("green").disabled = true;
+document.getElementById("skyblue").disabled = true;
+document.getElementById("fill").disabled = true;
+document.getElementById("peak").disabled = true;
 
 function createTable()
 {
@@ -39,6 +44,8 @@ function createTable()
 	var crht = new createHTML();
 	document.getElementById("table").innerHTML +=ht;
 	document.getElementById("grid").disabled = true;
+        document.getElementById("fill").disabled = false;
+        document.getElementById("peak").disabled = false;
 }
 
 
