@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>2D Peak Finder</h2>
+
+<input type="text" id="input"> Order of Grid </input>
+<button onclick="createTable()" id="grid"> Create Grid </button><br></br>
+<button onclick="refresh()"> Refresh </button>
+<button onclick="randomfill()" id="fill"> Random Fill </button>
+<p id="try"></p>
+<p id="table"></p>
+
+
+<br></br>
+<p><input type="text" size="1" id="red" style="background-color:red">Horizontal Local Maxima Row-wise</p>
+<p><input type="text" size="1" id="green" style="background-color:green">Vertical Local Maxima Coloum-wise</p>
+<p><input type="text" size="1" id="skyblue" style="background-color:skyblue">Peak Observed</p>
+<button type="button" id="peak" onclick="findPeak()">Find Peak</button>
+<p id="demo"></p>
+
+<script>
+
+var Peak = new Array();
+var f = 0;
+var row=0;
+var col=0;
+var ht = " ";
+var Arr = new Array();
+document.getElementById("red").disabled = true;
+document.getElementById("green").disabled = true;
+document.getElementById("skyblue").disabled = true;
+document.getElementById("fill").disabled = true;
+document.getElementById("peak").disabled = true;
+
+function createTable()
+{	
+	var str = document.getElementById("input").value;
+	row = parseInt(str.slice(0,str.indexOf("x")));
+	col = parseInt(str.slice(str.indexOf("x")+1,str.length));
+	document.getElementById("try").innerHTML += "ROWS: "+ row +"   COLUMNS: "+col+"</br>";
+	
+	var crht = new createHTML();
+	document.getElementById("table").innerHTML +=ht;
+	document.getElementById("grid").disabled = true;
+        document.getElementById("fill").disabled = false;
+        document.getElementById("peak").disabled = false;
+}
+
+function refresh()
+{
+	document.getElementById("try").innerHTML = " ";
+	document.getElementById('demo').innerHTML = " ";
+	document.getElementById("table").innerHTML = " ";
+	ht = " ";
+	document.getElementById("grid").disabled = false;
+	document.getElementById("fill").disabled = false;
+}
+
+function randomfill()
+{	
+    var a = 1;
+    for(var i=0; i<row;i++)
+    {
+    	for(var j=0;j<col;j++)
+        {	
+            document.getElementById(a).value = Math.floor(Math.random()*(100 - 0) + 0);
+            a++;
+        }
+    }	
+}
+
+function setColorOff()
+{
+    var a = 1;
+    for(var i=0; i<row;i++)
+    {
+    	for(var j=0;j<col;j++)
+        {     	
+            document.getElementById(a).style.backgroundColor = "white";
+            a++;
+        }
+    }
+}
+
+function arrayDeclared()
+{
+    for( var i=0;i<row;i++)
+    { Arr[i] = new Array(col);}
+}
+	
+function createHTML()
+{
+	var val = 1;
+	ht += "<table border=true><tbody>";
+	for( var i=0; i<row; i++)
+	{
+		ht += "<tr>";
+		for(var j=0; j<col ;j++)
+		{
+			ht += "<td><input type=\"text\" id="+val+" size=\"3\"></td>";
+			val++;
+		}
+		ht += "</tr>";
+	}
+	ht += "</tbody></table>";
+}
+
+function Initialize()
+{	
+    var a = 1;
+    for(var i=0; i<row;i++)
+    {
+    	for(var j=0;j<col;j++)
+        {
+            Arr[i][j]=parseInt(document.getElementById(a).value);
+            a++;
+        }
+    }	    
+}
+
+function vertical()
+{
+	for(var i=0; i<col; i++)
+    	{
+		var a = 0;
+    		var max=new Array();
+		var arr=new Array();
+    		for(var j=0; j<row; j++)
+        	{
+        		arr[j] = Arr[j][i];
+        	}
+        	//document.getElementById('demo').innerHTML +=arr + "</br>";
+        	for(var j = 0; j<row; j++)
+        	{
+           		if(j==0)
+			{
+				if(arr[j] > arr[j+1])
+                        	{
+                           	 	max[a] = arr[j];
+                           	 	a++;
+                            		var p = (col*j)+i+1 ;
+			    		//document.getElementById('demo').innerHTML +=p;
+					if(Peak.indexOf(p) == -1)
+					{
+			    			document.getElementById(p).style.backgroundColor = "green";
+					}
+					else
+					{
+						document.getElementById(p).style.backgroundColor = "skyblue";
+					}
+                         	}       
+            		}
+        		else 
+			{
+            			if((row-1)==j)
+				{
+					if(arr[j] > arr[j-1])
+                        		{
+                            			max[a] = arr[j];
+                            			a++;
+                            			var p = (col*j)+i+1 ;
+                            			//document.getElementById('demo').innerHTML +=p;
+			    			if(Peak.indexOf(p) == -1)
+						{
+			    				document.getElementById(p).style.backgroundColor = "green";
+						}
+						else
+						{
+							document.getElementById(p).style.backgroundColor = "skyblue";
+						}
+					}
+            			}
+              			else
+				{
+					if((arr[j] > arr[j+1]) && (arr[j] > arr[j-1]) )
+                			{
+                    				max[a] = arr[j];
+                    				a++;
+                            			var p = (col*j)+i+1 ;
+                            			//document.getElementById('demo').innerHTML +=p;
+						if(Peak.indexOf(p) == -1)
+						{
+			    				document.getElementById(p).style.backgroundColor = "green";
+						}
+						else
+						{
+							document.getElementById(p).style.backgroundColor = "skyblue";
+						}
+                			} 
+              			}
+        		}
+         	}
+         	/*document.getElementById('demo').innerHTML +="----------------"+"</br>";
+            	for(var k=0;k<max.length;k++)
+        	{
+        		document.getElementById('demo').innerHTML += max[k] + "</br>";       	
+        	}
+	    	document.getElementById('demo').innerHTML +="</br>";*/
+    	}
+}
+
+function localMaxima()
+{
+    for(var j=0; j<row ; j++)
+    {
+    	var a = 0;
+    	var max=new Array();
+    	var arr=new Array();
+        arr = Arr[j];
+        //document.getElementById('demo').innerHTML +=arr + "</br>";
+        for(var i = 0; i<col; i++)
+        {             
+            if(i == 0)
+	    {
+		    if(arr[i] > arr[i+1])
+		    {
+			    max[a] = arr[i];
+			    a++;
+			    var p = (col*j)+i+1 ;
+			    Peak[f] = p;
+			    f++;
+			    //document.getElementById('demo').innerHTML +="#"+arr[i]+ "(" + i +")"+ (arr[i]>arr[i+1]) +"#"+arr[i+1]+"("+(i+1)+")";
+			    document.getElementById(p).style.backgroundColor = "red";
+		    }       
+              }
+              else
+	      {
+		      if((col-1) == i)
+		  	{
+				if(arr[i] > arr[i-1])
+                        	{
+                            		max[a] = arr[i];
+                            		a++;
+                            		var p = (col*j)+i+1 ;
+			   		Peak[f] = p;
+					f++;
+                            		//document.getElementById('demo').innerHTML +=arr[i] + " 3 " + i;
+			    		document.getElementById(p).style.backgroundColor = "red";
+                         	}
+            		}
+              		else
+			{              
+				if((arr[i] > arr[i+1]) && (arr[i] > arr[i-1]))
+                		{
+                    			max[a] = arr[i];
+                    			a++;
+                            		var p = (col*j)+i+1 ;
+					Peak[f] = p;
+					f++;
+                            		//document.getElementById('demo').innerHTML +=arr[i] + "  ";
+					document.getElementById(p).style.backgroundColor = "red";
+                		}     
+                	 }
+        	}
+         }
+	 /*document.getElementById('demo').innerHTML +="----------------"+"</br>";
+         for(var k=0;k<max.length;k++)
+         {
+      		document.getElementById('demo').innerHTML += max[k] + "</br>";       	
+       	 }
+         document.getElementById('demo').innerHTML +="</br>"; */    	
+    }
+}
+
+function findPeak()
+{
+    var st = new setColorOff();
+    var ar = new arrayDeclared();
+    var init = new Initialize();
+    var lm = new localMaxima();
+    var ver = new vertical();
+    document.getElementById("fill").disabled = true;
+}
+
+</script>
+</body>
+</html> 
