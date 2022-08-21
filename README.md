@@ -9,3 +9,4 @@ Steps to use :
 5. Fill in the numeric values in the Grid or click on Random Fill button to fill grid with random generated numbers.
 6. Click on Find Peak button.
 7. Click Refresh to remove the old grid.
+8. finish
